@@ -1,4 +1,4 @@
-REGISTRY ?= docker.io/yourname
+REGISTRY ?= docker.io/sagyam
 TAG ?= v1
 STACK ?= shortlink
 IMAGES = shortlink-web shortlink-api shortlink-redirect shortlink-analytics
