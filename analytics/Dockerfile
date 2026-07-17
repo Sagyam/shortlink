@@ -1,6 +1,6 @@
 # ---- build: install deps into a self-contained venv ----
 # 1. Use the -dev variant so we have a shell and pip to compile our environment
-FROM reg.mini.dev/python:latest-dev AS build
+FROM reg.mini.dev/python:3.14.6-dev AS build
 USER root
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 RUN python -m venv /venv
@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 
 # ---- runtime: copy just the venv + code, run as a non-root user ----
 # 2. Keep the hyper-hardened, shell-free production tag here
-FROM reg.mini.dev/python:latest AS runtime
+FROM reg.mini.dev/python:3.14.6 AS runtime
 ENV PATH="/venv/bin:$PATH" PYTHONUNBUFFERED=1
 
 WORKDIR /app
