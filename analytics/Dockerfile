@@ -12,11 +12,9 @@ RUN pip install -r requirements.txt
 # ---- runtime: copy just the venv + code, run as a non-root user ----
 FROM reg.mini.dev/python:v3.14.6 AS runtime
 ENV PATH="/venv/bin:$PATH" PYTHONUNBUFFERED=1
-RUN useradd --create-home --uid 10001 appuser
 COPY --from=build /venv /venv
 WORKDIR /app
-COPY --chown=appuser:appuser app ./app
-USER appuser
+COPY  app ./app
 EXPOSE 8000
 HEALTHCHECK --interval=15s --timeout=3s --start-period=20s --retries=3 \
   CMD ["python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=2).status==200 else 1)"]
