@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 
 # ---- build: install production dependencies only ----
-FROM node:26.5.0-alpine3.24 AS build
+FROM reg.mini.dev/node:v26.5.0 AS build
 WORKDIR /app
 COPY package.json ./
 RUN npm install --omit=dev --no-audit --no-fund
 
 # ---- runtime: slim base, non-root, read-only friendly ----
-FROM node:26.5.0-alpine3.24 AS runtime
+FROM reg.mini.dev/node:v26.5.0 AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
 # the official node image already ships an unprivileged "node" user (uid 1000)

@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- build: compile a static binary ----
-FROM dhi.io/golang:1-debian-sfw-ent-dev AS build
+FROM reg.mini.dev/go:v1.26.5 AS build
 WORKDIR /src
 COPY go.mod ./
 COPY main.go ./
