@@ -56,6 +56,6 @@ jobs:
         with:
           context: ./${{ matrix.service }}
           push: true
-          tags: ${{ secrets.REGISTRY }}/shortlink-${{ matrix.service }}:${{ github.sha }}
+          tags: ${{ secrets.REGISTRY_USER }}/shortlink-${{ matrix.service }}:{{ github.sha }}
           sbom: true
           provenance: true
