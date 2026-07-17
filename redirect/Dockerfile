@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- build: compile a static binary ----
-FROM golang:1.22-bookworm AS build
+FROM golang:tip-alpine3.23 AS build
 WORKDIR /src
 COPY go.mod ./
 COPY main.go ./
@@ -16,5 +16,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=15s --timeout=3s --start-period=15s --retries=3 \
   CMD ["/redirect", "-healthcheck"]
 LABEL org.opencontainers.image.title="shortlink-redirect" \
-      org.opencontainers.image.description="ShortLink redirect hot path (Go, distroless)"
+  org.opencontainers.image.description="ShortLink redirect hot path (Go, distroless)"
 ENTRYPOINT ["/redirect"]
