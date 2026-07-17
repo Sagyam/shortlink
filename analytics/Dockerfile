@@ -1,9 +1,7 @@
 # ---- build: install deps into a self-contained venv ----
-FROM reg.mini.dev/python:v3.14.6 AS build
-
-# Elevate to root so we can create /venv in the root directory
+# 1. Use the -dev variant so we have a shell and pip to compile our environment
+FROM reg.mini.dev/python:v3.14.6-dev AS build
 USER root
-
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
@@ -12,22 +10,19 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # ---- runtime: copy just the venv + code, run as a non-root user ----
+# 2. Keep the hyper-hardened, shell-free production tag here
 FROM reg.mini.dev/python:v3.14.6 AS runtime
-
-# Elevate to root temporarily to set up our custom user
-USER root
 ENV PATH="/venv/bin:$PATH" PYTHONUNBUFFERED=1
-RUN useradd --create-home --uid 10001 appuser
 
-# Copy the venv built by root in the previous stage
-COPY --from=build /venv /venv
 WORKDIR /app
-COPY --chown=appuser:appuser app ./app
+COPY --from=build /venv /venv
 
-# Drop privileges back down for production safety
-USER appuser
+# We chown to UID 1000, which is the pre-baked non-root user in Minimus images
+COPY --chown=1000:1000 app ./app
 
 EXPOSE 8000
+
+# Your executive healthcheck syntax is perfect here since it bypasses the missing shell
 HEALTHCHECK --interval=15s --timeout=3s --start-period=20s --retries=3 \
   CMD ["python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=2).status==200 else 1)"]
 
