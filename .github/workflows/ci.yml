@@ -22,8 +22,8 @@ jobs:
           context: ./${{ matrix.service }}
           load: true
           tags: shortlink-${{ matrix.service }}:ci
-          sbom: true
-          provenance: true
+          sbom: false
+          provenance: false
 
       - name: CVE gate (fail on fixable CRITICAL/HIGH)
         uses: aquasecurity/trivy-action@master
