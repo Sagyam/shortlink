@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- build: compile a static binary ----
-FROM golang:tip-alpine3.23 AS build
+FROM dhi.io/golang:1-debian-sfw-ent-dev AS build
 WORKDIR /src
 COPY go.mod ./
 COPY main.go ./
