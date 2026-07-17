@@ -48,14 +48,14 @@ jobs:
       - name: Log in to the registry
         uses: docker/login-action@master
         with:
-          registry: ${{ secrets.REGISTRY }}
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build + push
         uses: docker/build-push-action@master
         with:
           context: ./${{ matrix.service }}
           push: true
-          tags: ${{ secrets.REGISTRY_USER }}/shortlink-${{ matrix.service }}:{{ github.sha }}
+          tags: ghcr.io/sagyam/shortlink-${{ matrix.service }}:latest
           sbom: true
           provenance: true
