@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- build: install deps into a self-contained venv ----
-FROM dhi.io/python:3 AS build
+FROM reg.mini.dev/python:v3.14.6 AS build
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
@@ -10,7 +10,7 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # ---- runtime: copy just the venv + code, run as a non-root user ----
-FROM dhi.io/python:3 AS runtime
+FROM reg.mini.dev/python:v3.14.6 AS runtime
 ENV PATH="/venv/bin:$PATH" PYTHONUNBUFFERED=1
 RUN useradd --create-home --uid 10001 appuser
 COPY --from=build /venv /venv

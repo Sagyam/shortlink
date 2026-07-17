@@ -10,7 +10,7 @@ RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/redirect .
 
 # ---- runtime: distroless "static", non-root, no shell, no package manager ----
-FROM gcr.io/distroless/static-debian12:nonroot AS runtime
+FROM reg.mini.dev/go:v1.26.5 AS runtime
 COPY --from=build /out/redirect /redirect
 EXPOSE 8080
 HEALTHCHECK --interval=15s --timeout=3s --start-period=15s --retries=3 \
