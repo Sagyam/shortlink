@@ -60,7 +60,7 @@ jobs:
           context: ./${{ matrix.service }}
           push: true
           tags: |
-            ${{secrets.REGISTRY_USER}}/${{secrets.REGISTRY}}-${{ matrix.service }}:{{ github.sha }}
+            ${{secrets.REGISTRY_USER}}/${{secrets.REGISTRY}}-${{ matrix.service }}:${{ github.sha }}
             ${{secrets.REGISTRY_USER}}/${{secrets.REGISTRY}}-${{ matrix.service }}:latest
           sbom: true
           provenance: true
