@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 
 # ---- runtime: copy just the venv + code, run as a non-root user ----
 # 2. Keep the hyper-hardened, shell-free production tag here
-FROM reg.mini.dev/python:3.14.6 AS runtime
+FROM dhi.io/python:3 AS runtime
 ENV PATH="/venv/bin:$PATH" PYTHONUNBUFFERED=1
 
 WORKDIR /app
