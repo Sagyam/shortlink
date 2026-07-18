@@ -8,10 +8,12 @@ ENV PATH="/venv/bin:$PATH"
 WORKDIR /app
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
+# Strip out build/install tools since they aren't needed at runtime
+RUN pip uninstall -y pip setuptools wheel
 
 # ---- runtime: copy just the venv + code, run as a non-root user ----
 # 2. Keep the hyper-hardened, shell-free production tag here
-FROM dhi.io/python:3 AS runtime
+FROM reg.mini.dev/python:3.14.6 AS runtime
 ENV PATH="/venv/bin:$PATH" PYTHONUNBUFFERED=1
 
 WORKDIR /app
