@@ -52,7 +52,6 @@ jobs:
       - name: Log in to the registry
         uses: docker/login-action@master
         with:
-          registry: docker.io
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
       - name: Build + push
@@ -60,6 +59,8 @@ jobs:
         with:
           context: ./${{ matrix.service }}
           push: true
-          tags: docker.io/sagyam/shortlink-${{ matrix.service }}:{{ github.sha }}
+          tags: |
+            ${{secrets.REGISTRY_USER}}/${{secrets.REGISTRY}}-${{ matrix.service }}:{{ github.sha }}
+            ${{secrets.REGISTRY_USER}}/${{secrets.REGISTRY}}-${{ matrix.service }}:latest
           sbom: true
           provenance: true
